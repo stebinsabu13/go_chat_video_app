@@ -10,7 +10,7 @@ func UserRoutes(api *gin.RouterGroup, authHandler *handler.AuthHandler) {
 	{
 		// Request JWT
 		login.GET("/login", authHandler.LoginPage)
-		// login.POST("/login", authHandler.LoginHandler)
+		login.POST("/login", authHandler.LoginHandler)
 	}
 	signup := api.Group("/user")
 	{

@@ -8,4 +8,5 @@ import (
 
 type AuthUsecase interface {
 	SignUp(context.Context, utils.BodySignUpuser) (string, error)
+	FindbyEmail(context.Context, string) (utils.ResponseUsers, error)
 }

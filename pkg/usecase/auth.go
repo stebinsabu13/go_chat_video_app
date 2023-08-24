@@ -43,3 +43,8 @@ func (cr *authUsecase) SignUp(ctx context.Context, body utils.BodySignUpuser) (s
 	}
 	return userid, nil
 }
+
+func (c *authUsecase) FindbyEmail(ctx context.Context, email string) (utils.ResponseUsers, error) {
+	user, err := c.AuthRepo.FindbyEmail(ctx, email)
+	return user, err
+}

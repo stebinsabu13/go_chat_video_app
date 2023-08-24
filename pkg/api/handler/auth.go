@@ -2,8 +2,11 @@ package handler
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/stebin13/go_chat_video_app/pkg/auth"
+	"github.com/stebin13/go_chat_video_app/pkg/support"
 	services "github.com/stebin13/go_chat_video_app/pkg/usecase/interfaces"
 	"github.com/stebin13/go_chat_video_app/pkg/utils"
 )
@@ -18,12 +21,31 @@ func NewAuthHandler(usecase services.AuthUsecase) *AuthHandler {
 	}
 }
 
-// func (cr *AuthHandler) LoginHandler(c *gin.Context) {
-// 	body := utils.BodyLogin{
-// 		Email:    c.PostForm("email"),
-// 		Password: c.PostForm("password"),
-// 	}
-// }
+func (cr *AuthHandler) LoginHandler(c *gin.Context) {
+	body := utils.BodyLogin{
+		Email:    c.PostForm("email"),
+		Password: c.PostForm("password"),
+	}
+	user, err := cr.AuthUsecase.FindbyEmail(c.Request.Context(), body.Email)
+	if err != nil {
+		c.HTML(200, "login.html", err)
+		return
+	}
+	ok := support.CheckPasswordHash(body.Password, user.Password)
+	if !ok {
+		c.HTML(200, "login.html", "Wrong password")
+		return
+	}
+	tokenString, err1 := auth.GenerateJWT(user.ID)
+	if err1 != nil {
+		c.HTML(200, "login.html", err)
+		return
+	}
+	c.SetCookie("user-token", tokenString, int(time.Now().Add(5*time.Minute).Unix()), "/", "localhost", false, true)
+	c.JSON(http.StatusOK, gin.H{
+		"Success": user,
+	})
+}
 
 func (cr *AuthHandler) SignUp(c *gin.Context) {
 	body := utils.BodySignUpuser{
