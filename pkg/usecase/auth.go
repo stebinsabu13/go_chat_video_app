@@ -21,6 +21,7 @@ func NewAuthUsecase(repo interfaces.AuthRepo) services.AuthUsecase {
 	}
 }
 
+// logic layer to add a new user
 func (cr *authUsecase) SignUp(ctx context.Context, body utils.BodySignUpuser) (string, error) {
 	if body.FirstName == "" || body.LastName == "" || body.Email == "" || body.MobileNum == "" || body.ConfirmPassword == "" || body.Password == "" {
 		return "", errors.New("fill the required fields")
@@ -44,6 +45,7 @@ func (cr *authUsecase) SignUp(ctx context.Context, body utils.BodySignUpuser) (s
 	return userid, nil
 }
 
+// logic layer for the finding user by email
 func (c *authUsecase) FindbyEmail(ctx context.Context, email string) (utils.ResponseUsers, error) {
 	user, err := c.AuthRepo.FindbyEmail(ctx, email)
 	return user, err

@@ -22,6 +22,8 @@ func NewAuthHandler(usecase services.AuthUsecase) *AuthHandler {
 }
 
 func (cr *AuthHandler) LoginHandler(c *gin.Context) {
+
+	//binding the body to login from the html form
 	body := utils.BodyLogin{
 		Email:    c.PostForm("email"),
 		Password: c.PostForm("password"),
@@ -36,11 +38,15 @@ func (cr *AuthHandler) LoginHandler(c *gin.Context) {
 		c.HTML(200, "login.html", "Wrong password")
 		return
 	}
+
+	//generating jwt token for authorization
 	tokenString, err1 := auth.GenerateJWT(user.ID)
 	if err1 != nil {
 		c.HTML(200, "login.html", err)
 		return
 	}
+
+	//setting cookie for a defined time frame
 	c.SetCookie("user-token", tokenString, int(time.Now().Add(5*time.Minute).Unix()), "/", "localhost", false, true)
 	c.JSON(http.StatusOK, gin.H{
 		"Success": user,
