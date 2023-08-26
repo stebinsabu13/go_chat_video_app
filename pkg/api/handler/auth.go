@@ -48,9 +48,7 @@ func (cr *AuthHandler) LoginHandler(c *gin.Context) {
 
 	//setting cookie for a defined time frame
 	c.SetCookie("user-token", tokenString, int(time.Now().Add(5*time.Minute).Unix()), "/", "localhost", false, true)
-	c.JSON(http.StatusOK, gin.H{
-		"Success": user,
-	})
+	c.Redirect(http.StatusFound, "/user/home")
 }
 
 func (cr *AuthHandler) SignUp(c *gin.Context) {
@@ -76,4 +74,8 @@ func (cr *AuthHandler) LoginPage(c *gin.Context) {
 
 func (cr *AuthHandler) SignUpPage(c *gin.Context) {
 	c.HTML(http.StatusOK, "signup.html", "Please login")
+}
+
+func (cr *AuthHandler) HomePage(c *gin.Context) {
+	c.HTML(200, "home.html", nil)
 }
