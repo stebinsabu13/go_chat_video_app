@@ -23,5 +23,6 @@ func UserRoutes(api *gin.RouterGroup, authHandler *handler.AuthHandler) {
 	{
 		home.Use(middleware.AuthorizationMiddleware("user"))
 		home.GET("/home", authHandler.HomePage)
+		home.GET("/search/results", authHandler.SearchResults)
 	}
 }
