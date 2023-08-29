@@ -79,3 +79,7 @@ func (cr *AuthHandler) SignUpPage(c *gin.Context) {
 func (cr *AuthHandler) HomePage(c *gin.Context) {
 	c.HTML(200, "home.html", nil)
 }
+
+func (cr *AuthHandler) SearchResults(c *gin.Context) {
+
+}
