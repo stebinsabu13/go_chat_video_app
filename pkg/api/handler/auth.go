@@ -23,7 +23,6 @@ func NewAuthHandler(usecase services.AuthUsecase) *AuthHandler {
 
 func (cr *AuthHandler) LoginHandler(c *gin.Context) {
 
-	//binding the body to login from the html form
 	body := utils.BodyLogin{
 		Email:    c.PostForm("email"),
 		Password: c.PostForm("password"),
